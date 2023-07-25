@@ -26,6 +26,17 @@ function brewDownload () {
 		echo "/opt/homebrew/bin/fish" | sudo tee -a "/etc/shells" > /dev/null
 	fi
 	chsh -s /opt/homebrew/bin/fish
+	cat > ~/.config/fish/config.fish << \
+EOF
+if status is-interactive
+     neofetch
+    echo "\$(set_color blue)Just a reminder, when running scripts, set the auth token to the variable \"auth\" for the scripts to work."
+    echo "They do not require any input"
+    echo "If you ever get lost, simply type the command \"scriptHelp\" for more information on what is available."
+    echo "The variables \"auth\" and \"serial\" are highly recommended to make things easier on yourself.\$(set_color normal)"
+end
+EOF
+
 }
 
 
