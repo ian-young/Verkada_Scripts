@@ -41,6 +41,6 @@ $(set_color normal)"
 	echo "$(set_color yellow)scripts:$(set_color normal)    		Will take you to where all the scripts reside on the system."
 	echo "$(set_color yellow)startup:$(set_color normal)		Opens and new terminal and moves the originally terminal's cwd to scripting."
 	echo "$(set_color yellow)tips:$(set_color normal)			Displays tips for running all of these commands."
-	echo "$(set_color yellow)update:$(set_color normal)			Updates vToolbbox and brew applications." 
+	echo "$(set_color yellow)update:$(set_color normal)			Updates vToolbox and brew applications." 
 	echo "$(set_color green)---------------------------------------------$(set_color normal)"
 end
