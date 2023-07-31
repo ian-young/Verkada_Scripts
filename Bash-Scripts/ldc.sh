@@ -55,7 +55,7 @@ else
 fi
 
 if [ $DEVICE_ID == 1 ]; then
-	vtoolbox device.set-device-config -u $AUTH_CODE -d $DEVICE -p 'camera-config.lds-enable' "$TOGGLE"
+	vtoolbox device.set-device-config -u $AUTH_CODE -d $DEVICE -p 'camera-config.ldc-enable' "$TOGGLE"
 	
 	if [ $REBOOT == 1 ]; then
 		vtoolbox remotesh.reboot -a $AUTH_CODE -d $DEVICE
