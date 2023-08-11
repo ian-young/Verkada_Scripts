@@ -5,7 +5,7 @@
 # Set to accept one argument and check it
 if [ -z "$1" ] || [ "$1" == "-h" ] || [ "$1" == "--help" ]; then
 	echo "Will toggle LDC based on the toggle that is inputted (y/n)"
-	echo "Takes -s <support token>, -d <device ID> OR -s <serial>, and -t <y/n>"
+	echo "Takes -a <support token>, -d <device ID> OR -s <serial>, and -t <y/n>"
 	exit 0
 fi
 
@@ -40,13 +40,13 @@ REBOOT=0 # Determines if a camera reboot is required
 if [ "$5" == "-t" ] || [ "$5" == "--toggle" ]; then
 	if [ "$6" == "y" ]; then
 		TOGGLE="true"
-	elif [ "$6" == "n" ]
+	elif [ "$6" == "n" ]; then
 		REBOOT=1
 	fi
 else
 	if [ "$3" == "y" ]; then
 		TOGGLE="true"
-	elif [ "$3" == "n" ]
+	elif [ "$3" == "n" ]; then
 		REBOOT=1
 	else
 		echo "Please provide a valid toggle switch (-t <y/n>)"
