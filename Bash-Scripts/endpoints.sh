@@ -32,52 +32,57 @@ else
 	AUTH_CODE=$1
 fi
 
-if [ "$3" == "-s" ] || [ "$3" == "--serial" ]; then
-	SERIAL=$4
-	
-	# Run throught the array of endpoints and and output the raw results
-	for URL in "${URLS[@]}"
-		do	
-			echo " "
-			RESULTS=$(vtoolbox remotesh.curl -a $AUTH_CODE -s $SERIAL -u $URL | tr -d '{["]}\n')
-	
-			if [ -z "$RESULTS" ]; then
-				echo "$URL FAILED"
-			else	
-				let COUNTER++
-			fi
-	
-			echo "$URL response: $RESULTS"
-			echo "---------------------------------------------------------"
+case $3 in
+	-s)
+		SERIAL=$4
+		
+		# Run throught the array of endpoints and output the raw results
+		for URL in "${URLS[@]}"
+			do	
+				echo " "
+				RESULTS=$(vtoolbox remotesh.curl -a $AUTH_CODE -s $SERIAL -u $URL | tr -d '{["]}\n')
+		
+				if [ -z "$RESULTS" ]; then
+					echo "$URL FAILED"
+				else	
+					let COUNTER++
+				fi
+		
+				echo "$URL response: $RESULTS"
+				echo "---------------------------------------------------------"
 		done
-else
-	SERIAL=$3
-	
-	# Run throught the array of endpoints and and output the raw results
-	for URL in "${URLS[@]}"
-		do	
-			echo " "
-			RESULTS=$(vtoolbox remotesh.curl -a $AUTH_CODE -s $SERIAL -u $URL | tr -d '{["]}\n')
-	
-			if [ -z "$RESULTS" ]; then
-				echo "$URL FAILED"
-			else	
-				let COUNTER++
-			fi
-	
-			echo "$URL response: $RESULTS"
-			echo "---------------------------------------------------------"
-		done
-fi
+	;;
 
-if [ "$3" == "-d" ] || [ "$3" == "--id" ] || [ "$3" == "-c" ];then
-	ID=$4
+	-d)
+		ID=$4
+		
+		# Run throught the array of endpoints and output the raw results
+		for URL in "${URLS[@]}"
+			do	
+				echo " "
+				RESULTS=$(vtoolbox remotesh.curl -a $AUTH_CODE -d $ID -u $URL | tr -d '{["]}\n')
+		
+			if [ -z "$RESULTS" ]; then
+				echo "$URL FAILED"
+			else	
+				let COUNTER++
+			fi
+		
+			echo "$URL response: $RESULTS"
+			echo "---------------------------------------------------------"
+		done
+	;;
+
+	*)
+		echo -e "Invalid input: $argv[3]\n\nUsing\nAuth: $auth\nSerial: $serial"
+	;;
+esac
 	
-	# Run throught the array of endpoints and and output the raw results
+	# Run throught the array of endpoints and output the raw results
 	for URL in "${URLS[@]}"
 		do	
 			echo " "
-			RESULTS=$(vtoolbox remotesh.curl -a $AUTH_CODE -d $ID -u $URL | tr -d '{["]}\n')
+			RESULTS=$(vtoolbox remotesh.curl -a $auth -s $serial -u $URL | tr -d '{["]}\n')
 	
 		if [ -z "$RESULTS" ]; then
 			echo "$URL FAILED"
@@ -88,23 +93,5 @@ if [ "$3" == "-d" ] || [ "$3" == "--id" ] || [ "$3" == "-c" ];then
 		echo "$URL response: $RESULTS"
 		echo "---------------------------------------------------------"
 	done
-else
-	ID=$3
-	
-	# Run throught the array of endpoints and and output the raw results
-	for URL in "${URLS[@]}"
-		do	
-			echo " "
-			RESULTS=$(vtoolbox remotesh.curl -a $AUTH_CODE -d $ID -u $URL | tr -d '{["]}\n')
-	
-		if [ -z "$RESULTS" ]; then
-			echo "$URL FAILED"
-		else	
-			let COUNTER++
-		fi
-	
-		echo "$URL response: $RESULTS"
-		echo "---------------------------------------------------------"
-	done
-fi
+
 echo "Finished $COUNTER/$ARRAY_LENGTH"
