@@ -1,13 +1,27 @@
 function deviceID --description 'Pulls the device ID from the serial number that is given' -a SERIAL
-	echo "O       o O       o O       o
+	if test "$argv[1]" = "-l"
+		set id \
+		$(vtoolbox device.lookup -s $serial | grep "cameraId" | tr -d ',"' | awk -F ' ' '{print $2}')
+		echo "$id"
+	else if test "$argv[1]" = "-h"
+		echo "Run with no arguments to use $serial as the camera serial number."
+		echo "Otherwise, run with -l to make it compatible for easy copy and paste into an array or -s to specify the serial number that will be used."
+	else if test "$argv[1]" = " -s"
+		echo "O       o O       o O       o
 | O   o | | O   o | | O   o |
 | | O | | | | O | | | | O | |
 | o   O | | o   O | | o   O |
 o       O o       O o       O"
-	if test (count $argv) -lt 1
-		set id $(vtoolbox device.lookup -s $serial | grep "cameraId" | tr -d ',"' | awk -F ' ' '{print $2}')
+		set id \
+		$(vtoolbox device.lookup -s $argv[2] | grep "cameraId" | tr -d ',"' | awk -F ' ' '{print $2}')
+		echo "Camera ID: $id"
 	else
-		set id $(vtoolbox device.lookup -s $argv[1] | grep "cameraId" | tr -d ',"' | awk -F ' ' '{print $2}')
+		echo "O       o O       o O       o
+| O   o | | O   o | | O   o |
+| | O | | | | O | | | | O | |
+| o   O | | o   O | | o   O |
+o       O o       O o       O"
+	set id $(vtoolbox device.lookup -s $serial | grep "cameraId" | tr -d ',"' | awk -F ' ' '{print $2}')
+	echo "Camera id: $id"
 	end
-	echo "Camera ID: $id"
 end
