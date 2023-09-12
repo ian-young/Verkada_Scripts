@@ -293,11 +293,8 @@ nukeOrg () {
 nuke () {
 # Driver function
 	input=""
-<<<<<<< HEAD
-	working=('Working    |' 'wOrking.   \' 'woRking..  -' 'worKing... |' 'workIng..  /' 'workiNg.   -' 'workinG    |')
-=======
+
 	working=('Working    |' 'wOrking.   \' 'woRking..  -' 'worKing... |' 'workIng..  /' 'workiNg.   -' 'workingG   |')
->>>>>>> 56320ba4d6c68eed67151b676f57d967b3d00b67
 
 	if [ -z "$auth" ]; then
 		notSet="Not provided"
