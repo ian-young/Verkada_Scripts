@@ -43,9 +43,11 @@ EOF
 function vToolboxSetup () {
 	# Runs the necessary code to install vToolbox for the most part...
 	# Certain aspects of this code cannot be automated due to the private token required for the install.
-
+	
 	# Install Pyenv to manage python versions
 	brew install pyenv
+
+	echo -e "\nSetting up pyenv for zsh\n"
 
 	# add pyenv support to your shell
 	echo 'eval "$(pyenv init --path)"' >> ~/.zshrc
