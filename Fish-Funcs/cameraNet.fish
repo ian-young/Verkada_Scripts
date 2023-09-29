@@ -42,14 +42,12 @@ function cameraNet --description 'Prints the camera needed to view camera networ
 		# If there are less than two arguments provided
 		echo "Running for camera: $serial"
 		echo "---------------------------------------------------" 
-		set RESULTS $(vtoolbox remotesh.ifconfig -a $auth -s $serial \
-			| grep -E "([0-9]{1,3}[\.]){3}[0-9]{1,3}")
+		set RESULTS $(vtb -Q -a $auth -s $serial ifconfig | grep -E "([0-9]{1,3}[\.]){3}[0-9]{1,3}")
 	else if test (count $argv) -lt 4
 		# If two arguments are provided
 		echo "Running for $argv[3]"
 		echo "---------------------------------------------------" 
-		set RESULTS $(vtoolbox remotesh.ifconfig -a $argv[1] -d $argv[3] \
-			| grep -E "([0-9]{1,3}[\.]){3}[0-9]{1,3}")
+		set RESULTS $(vtb -Q -a $argv[1] -d $argv[3] ifconfig | grep -E "([0-9]{1,3}[\.]){3}[0-9]{1,3}")
 	end
 	echo "$RESULTS"
 end

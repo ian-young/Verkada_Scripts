@@ -4,11 +4,11 @@ function ldc --description 'Allows you to easily toggle LDC on a camera. Will ru
 		echo "Toggle only mode"
 		if test "$argv[1]" = "n"
 			echo "LDC off"
-			vtoolbox device.set-device-config -u $auth -s $serial -p 'camera-config.ldc-enable' 'false'
+			vtb -u $auth -s $serial set-device-config -p 'camera-config.ldc-enable' 'false'
 		else if test "$argv[1]" = "y"
 			echo "LDC on"
-			vtoolbox device.set-device-config -u $auth -s $serial -p 'camera-config.ldc-enable' 'true'
-			vtoolbox remotesh.reboot -a $auth -s $serial
+			vtb -Q -u $auth -s $serial set-device-config -p 'camera-config.ldc-enable' 'true'
+			vtb -Q -a $auth -s $serial reboot
 		else
 			echo "Please provide y/n"
 		end
@@ -23,14 +23,14 @@ function ldc --description 'Allows you to easily toggle LDC on a camera. Will ru
 			exit 0
 		end
 		# echo "Would run with $argv[1], $argv[2], $LDC"
-		vtoolbox device.set-device-config -u $argv[1] -s $argv[2] -p 'camera-config.ldc-enable' "$LDC"
+		vtb -Q -u $argv[1] -s $argv[2] set-device-config -p 'camera-config.ldc-enable' "$LDC"
 	else if test (count $argv) = 4
 		if test "$argv[2]" = "-d"
 			if test "$argv[4]" = "y"
 				set LDC true
 				set REBOOT True
 			if test "$REBOOT" = "True"
-				vtoolbox remotesh.reboot -a $argv[1] -d $argv[3]
+				vtb -Q -a $argv[1] -d $argv[3] reboot
 			end
 			else if test "$argv[4]" = "n"
 				set LDC false
@@ -39,9 +39,9 @@ function ldc --description 'Allows you to easily toggle LDC on a camera. Will ru
 				exit 0
 			end
 			# echo "Would run with $argv[1], $argv[3], $LDC"
-			vtoolbox device.set-device-config -u $argv[1] -d $argv[3] -p 'camera-config.ldc-enable' "$LDC"
+			vtb -Q -u $argv[1] -d $argv[3] set-device-config -p 'camera-config.ldc-enable' "$LDC"
 			if test "$REBOOT" = "True"
-				vtoolbox remotesh.reboot -a $argv[1] -d $argv[3]
+				vtb -Q -a $argv[1] -d $argv[3] reboot
 			end
 		else
 			echo "Please provide \"-d\" if attempting to pass a device ID."
