@@ -19,17 +19,18 @@ if [ -z "$1" ] || [ "$1" == "-h" ] || [ "$1" == "--help" ]; then
 fi
 
 if [ "$1" == "-l" ] || [ "$1" == "--list" ]; then
-	ID=$(vtoolbox device.lookup -s $SERIAL | grep "cameraId" | tr -d ',"' | awk -F ' ' '{print $2}')
-	echo "$ID"
-	break
-
 	if [ "$2" == " -s" ] || [ "$2" == "--serial" ]; then
 		ID=$(vtoolbox device.lookup -s $3 | grep "cameraId" | tr -d ',"' | awk -F ' ' '{print $2}')
 		echo "$ID"
+		exit 0
 	else
 		ID=$(vtoolbox device.lookup -s $2 | grep "cameraId" | tr -d ',"' | awk -F ' ' '{print $2}')
 		echo "$ID"
+		exit 0
 	fi
+
+	ID=$(vtoolbox device.lookup -s $SERIAL | grep "cameraId" | tr -d ',"' | awk -F ' ' '{print $2}')
+	echo "$ID"
 
 fi
 
