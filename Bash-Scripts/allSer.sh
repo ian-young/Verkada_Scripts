@@ -28,6 +28,5 @@ echo "    \\========/"
 echo "     \`------'" 
 echo ""
 
-vtoolbox organizations.get-all-camera-info -a $AUTH_CODE -o $ORG | grep "serial" \
-| awk -F ' ' '{print $2}' | tr -d '",'
+vtb -Q -a $AUTH_CODE -o $ORG get-all-camera-info | grep "serial" | awk -F ' ' '{print $2}' | tr -d '",'
 

@@ -21,7 +21,7 @@ cameraSnapshot () {
 		echo "Creating a new snapshot"
 	fi
 
-	toWrite=$(vtoolbox remotesh.cat /mnt/config/config -s $1 | tr , '\n' | tr -d '"{,}')
+	toWrite=$(vtb -Q -s $1 cat /mnt/config/config | tr , '\n' | tr -d '"{,}')
 
 	sample=$(echo "$toWrite" | head -1)
 
@@ -55,7 +55,7 @@ nukeOrg () {
 	echo "LDC should be reset individually since it requires the device to reboot."
 	if [ -f cameras.setting ]; then
 		# If a snapshot file exists, use it
-		cameras="$(vtoolbox organizations.get-all-camera-info -a $auth -o $org | grep "serial" \
+		cameras="$(vtb -Q -a $auth -o $org get-all-camera-info | grep "serial" \
 			| awk -F ' ' '{print $2}' | tr -s '",')"
 		walker="" # Will walk through the snapshot file and pull values
 		for camera in $cameras
@@ -65,131 +65,131 @@ nukeOrg () {
 
 			# Start camera config (snapshot)
 			walker=$(cat cameras.setting | grep http-proxy | awk -F ':' '{print $4}')
-			vtoolbox device.set-device-config -u $auth -s $camera -p \
+			vtb -Q -u $auth -s $camera set-device-config -p \
 			'http-proxy.backup-aws' "https:$walker" >> /dev/null &
 			walker=$(cat cameras.setting | grep backup-bb | awk -F ':' '{print $3}')
-			vtoolbox device.set-device-config -u $auth -s $camera -p \
+			vtb -Q -u $auth -s $camera set-device-config -p \
 			'http-proxy.backup-bb' "https:$walker" >> /dev/null &
 			walker=$(cat cameras.setting | grep loggly | awk -F ':' '{print $3}')
-			vtoolbox device.set-device-config -u $auth -s $camera -p \
+			vtb -Q -u $auth -s $camera set-device-config -p \
 			'http-proxy.loggly' "https:$walker" >> /dev/null &
 			walker=$(cat cameras.setting | grep vauth | awk -F ':' '{print $3}')
-			vtoolbox device.set-device-config -u $auth -s $camera -p \
+			vtb -Q -u $auth -s $camera set-device-config -p \
 			'http-proxy.vauth' "https:$walker" >> /dev/null &
 			walker=$(cat cameras.setting | grep vcameramgmt | awk -F ':' '{print $3}')
-			vtoolbox device.set-device-config -u $auth -s $camera -p \
+			vtb -Q -u $auth -s $camera set-device-config -p \
 			'http-proxy.vcameramgmt' "https:$walker" >> /dev/null &
 			walker=$(cat cameras.setting | grep vflow | awk -F ':' '{print $3}')
-			vtoolbox device.set-device-config -u $auth -s $camera -p \
+			vtb -Q -u $auth -s $camera set-device-config -p \
 			'http-proxy.vflow' "wss:$walker" >> /dev/null &
 			walker=$(cat cameras.setting | grep vhistory | awk -F ':' '{print $3}')
-			vtoolbox device.set-device-config -u $auth -s $camera -p \
+			vtb -Q -u $auth -s $camera set-device-config -p \
 			'http-proxy.vhistory' "wss:$walker" >> /dev/null &
 			walker=$(cat cameras.setting | grep vosprey | awk -F ':' '{print $3}')
-			vtoolbox device.set-device-config -u $auth -s $camera -p \
+			vtb -Q -u $auth -s $camera set-device-config -p \
 			'http-proxy.vosprey' "https:$walker" >> /dev/null &
 			walker=$(cat cameras.setting | grep vprovision | awk -F ':' '{print $3}')
-			vtoolbox device.set-device-config -u $auth -s $camera -p \
+			vtb -Q -u $auth -s $camera set-device-config -p \
 			'http-proxy.vprovision' "https:$walker" >> /dev/null &
 			walker=$(cat cameras.setting | grep vproxy | awk -F ':' '{print $3}' | head -1)
-			vtoolbox device.set-device-config -u $auth -s $camera -p \
+			vtb -Q -u $auth -s $camera set-device-config -p \
 			'http-proxy.vproxy' "https:$walker" >> /dev/null &
 			walker=$(cat cameras.setting | grep vstream | awk -F ':' '{print $3}' | head -1)
-			vtoolbox device.set-device-config -u $auth -s $camera -p \
+			vtb -Q -u $auth -s $camera set-device-config -p \
 			'http-proxy.vstream' "wss:$walker" >> /dev/null &
 			walker=$(cat cameras.setting | grep vsubmit | awk -F ':' '{print $3}')
-			vtoolbox device.set-device-config -u $auth -s $camera -p \
+			vtb -Q -u $auth -s $camera set-device-config -p \
 			'http-proxy.vsubmit' "https:$walker" >> /dev/null &
 			walker=$(cat cameras.setting | grep vsubmit | awk -F ':' '{print $3}')
-			vtoolbox device.set-device-config -u $auth -s $camera -p \
+			vtb -Q -u $auth -s $camera set-device-config -p \
 			'cvproc-hyperzoom.motion-threshold' "$walker" >> /dev/null &
 			walker=$(cat cameras.setting | grep object-tracking-hz-interval-high-quality \
 			| awk -F ':' '{print $2}')
-			vtoolbox device.set-device-config -u $auth -s $camera -p \
+			vtb -Q -u $auth -s $camera set-device-config -p \
 			'cvproc-hyperzoom.object-tracking-hz-interval-high-quality' "$walker" >> /dev/null &
 			walker=$(cat cameras.setting | grep object-tracking-hz-interval-low-quality \
 			| awk -F ':' '{print $2}')
-			vtoolbox device.set-device-config -u $auth -s $camera -p \
+			vtb -Q -u $auth -s $camera set-device-config -p \
 			'cvproc-hyperzoom.object-tracking-hz-interval-low-quality' "$walker" >> /dev/null &
 			walker=$(cat cameras.setting | grep object-tracking-max-lost-tracklet-age \
 			| awk -F ':' '{print $2}')
-			vtoolbox device.set-device-config -u $auth -s $camera -p \
+			vtb -Q -u $auth -s $camera set-device-config -p \
 			'cvproc-hyperzoom.object-tracking-max-lost-tracklet-age' "$walker" >> /dev/null &
 			walker=$(cat cameras.setting | grep object-tracking-movement-threshold-low-quality \
 			| awk -F ':' '{print $2}')
-			vtoolbox device.set-device-config -u $auth -s $camera -p \
+			vtb -Q -u $auth -s $camera set-device-config -p \
 			'cvproc-hyperzoom.object-tracking-movement-threshold-low-quality' "$walker" >> /dev/null &
 			walker=$(cat cameras.setting | grep person-crop-threshold | awk -F ':' '{print $2}')
-			vtoolbox device.set-device-config -u $auth -s $camera -p \
+			vtb -Q -u $auth -s $camera set-device-config -p \
 			'cvproc-hyperzoom.person-crop-threshold' "$walker" >> /dev/null &
 			walker=$(cat cameras.setting | grep person-intrusion-threshold | awk -F ':' '{print $2}')
-			vtoolbox device.set-device-config -u $auth -s $camera -p \
+			vtb -Q -u $auth -s $camera set-device-config -p \
 			'cvproc-hyperzoom.person-intrusion-threshold' "$walker" >> /dev/null &
 			walker=$(cat cameras.setting | grep person-send-full-frame-threshold | awk -F ':' '{print $2}')
-			vtoolbox device.set-device-config -u $auth -s $camera -p \
+			vtb -Q -u $auth -s $camera set-device-config -p \
 			'cvproc-hyperzoom.person-send-full-frame-threshold' "$walker" >> /dev/null &
 			walker=$(cat cameras.setting | grep vehicle-intrusion-threshold | awk -F ':' '{print $2}')
-			vtoolbox device.set-device-config -u $auth -s $camera -p \
+			vtb -Q -u $auth -s $camera set-device-config -p \
 			'cvproc-hyperzoom.vehicle-intrusion-threshold' "$walker" >> /dev/null &
 			walker=$(cat cameras.setting | grep vehicle-send-full-frame-threshold | awk -F ':' '{print $2}')
-			vtoolbox device.set-device-config -u $auth -s $camera -p \
+			vtb -Q -u $auth -s $camera set-device-config -p \
 			'cvproc-hyperzoom.vehicle-send-full-frame-threshold' "$walker" >> /dev/null &
 			walker=$(cat cameras.setting | grep vprox-url | awk -F ':' '{print $2}')
-			vtoolbox device.set-device-config -u $auth -s $camera -p 'vproxy-url' "$walker" >> /dev/null &
+			vtb -Q -u $auth -s $camera set-device-config -p 'vproxy-url' "$walker" >> /dev/null &
 			walker=$(cat cameras.setting | grep image-night-ae-compensation | awk -F ':' '{print $3}')
-			vtoolbox device.set-device-config -u $auth -s $camera -p \
+			vtb -Q -u $auth -s $camera set-device-config -p \
 			'image-processing.image-night-ae-compensation' "$walker" >> /dev/null &
 			walker=$(cat cameras.setting | grep low-lux-mode-off-thresh | awk -F ':' '{print $2}')
-			vtoolbox device.set-device-config -u $auth -s $camera -p \
+			vtb -Q -u $auth -s $camera set-device-config -p \
 			'image-processing.low-lux-mode-off-thresh' "$walker" >> /dev/null &
 			walker=$(cat cameras.setting | grep max-shutter-time-hyperzoom-hz \
 			| awk -F ':' '{print $2}' | head -1)
-			vtoolbox device.set-device-config -u $auth -s $camera -p \
+			vtb -Q -u $auth -s $camera set-device-config -p \
 			'image-processing.max-shutter-time-hyperzoom-hz' "$walker" >> /dev/null &
 			walker=$(cat cameras.setting | grep max-shutter-time-hyperzoom-hz \
 			| awk -F ':' '{print $2}' | tail -1)
-			vtoolbox device.set-device-config -u $auth -s $camera -p \
+			vtb -Q -u $auth -s $camera set-device-config -p \
 			'image-processing.night-max-shutter-time-hyperzoom-hz' "$walker" >> /dev/null &
 			walker=$(cat cameras.setting | grep detection-person-confidence-threshold \
 			| awk -F ':' '{print $2}')
-			vtoolbox device.set-device-config -u $auth -s $camera -p \
+			vtb -Q -u $auth -s $camera set-device-config -p \
 			'motion-search.detection-person-confidence-threshold' "$walker" >> /dev/null &
 			walker=$(cat cameras.setting | grep detection-vehicle-confidence-threshold \
 			| awk -F ':' '{print $2}')
-			vtoolbox device.set-device-config -u $auth -s $camera -p \
+			vtb -Q -u $auth -s $camera set-device-config -p \
 			'motion-search.detection-vehicle-confidence-threshold' "$walker" >> /dev/null &
 			walker=$(cat cameras.setting | grep max-viewers | awk -F ':' '{print $3}')
-			vtoolbox device.set-device-config -u $auth -s $camera -p \
+			vtb -Q -u $auth -s $camera set-device-config -p \
 			'rtsp.max-viewers' "$walker" >> /dev/null &
 			walker=$(cat cameras.setting | grep channel | awk -F ':' '{print $3}')
-			vtoolbox device.set-device-config -u $auth -s $camera -p \
+			vtb -Q -u $auth -s $camera set-device-config -p \
 			'release-info.channel' "$walker" >> /dev/null &
 			walker=$(cat cameras.setting | grep system-stats-window | awk -F ':' '{print $2}')
-			vtoolbox device.set-device-config -u $auth -s $camera -p \
+			vtb -Q -u $auth -s $camera set-device-config -p \
 			'stats-monitor-config.system-stats-window' "$walker" >> /dev/null &
 			walker=$(cat cameras.setting | grep cloud-backup-location | awk -F ':' '{print $2}')
-			vtoolbox device.set-device-config -u $auth -s $camera -p \
+			vtb -Q -u $auth -s $camera set-device-config -p \
 			'storage-manage.cloud-backup-location' "$walker" >> /dev/null &
 			walker=$(cat cameras.setting | grep stream-encoding | awk -F ':' '{print $4}' | head -1)
-			vtoolbox device.set-device-config -u $auth -s $camera -p \
+			vtb -Q -u $auth -s $camera set-device-config -p \
 			'stream-configs.high.stream-encoding' "$walker" >> /dev/null &
 			walker=$(cat cameras.setting | grep stream-encoding | awk -F ':' '{print $3}' | tail -1)
-			vtoolbox device.set-device-config -u $auth -s $camera -p \
+			vtb -Q -u $auth -s $camera set-device-config -p \
 			'low.stream-encoding' "$walker" >> /dev/null &
 			walker=$(cat cameras.setting | grep cloud-backup-presigned-timeout | awk -F ':' '{print $2}')
-			vtoolbox device.set-device-config -u $auth -s $camera -p \
+			vtb -Q -u $auth -s $camera set-device-config -p \
 			'storage-manager.cloud-backup-presigned-timeout' "$walker" >> /dev/null &
 			walker=$(cat cameras.setting | grep record-on-motion-expansion | awk -F ':' '{print $2}')
-			vtoolbox device.set-device-config -u $auth -s $camera -p \
+			vtb -Q -u $auth -s $camera set-device-config -p \
 			'storage-manager.record-on-motion-expansion' "$walker" >> /dev/null &
 			walker=$(cat cameras.setting | grep thumbnail-repeat-interval | awk -F ':' '{print $2}')
-			vtoolbox device.set-device-config -u $auth -s $camera -p \
+			vtb -Q -u $auth -s $camera set-device-config -p \
 			'storage-manager.thumbnail-repeat-interval' "$walker" >> /dev/null &
 			walker=$(cat cameras.setting | grep motion-notification-divisor | awk -F ':' '{print $3}')
-			vtoolbox device.set-device-config -u $auth -s $camera -p \
+			vtb -Q -u $auth -s $camera set-device-config -p \
 			'stream-configs.vda.motion-notification-divisor' "$walker" >> /dev/null &
 			walker=$(cat cameras.setting | grep | awk -F ':' '{print $4}' | tail -1)
-			vtoolbox device.set-device-config -u $auth -s $camera -p \
+			vtb -Q -u $auth -s $camera set-device-config -p \
 			'vstream.high.enabled' "$walker" >> /dev/null  &
 			wait
 			echo -e "\nEnd of camera reset for $camera."	
@@ -206,81 +206,81 @@ nukeOrg () {
 			vtoolbox remotesh.reset-zoom-and-autofocus -s $camera -a $auth >> /dev/null &
 
 			# Start camera config (dome default)
-			vtoolbox device.set-device-config -u $auth -s $camera -p \
+			vtb -Q -u $auth -s $camera set-device-config -p \
 			'http-proxy.backup-aws' 'https://s3.us-west-2.amazonaws.com' >> /dev/null &
-			vtoolbox device.set-device-config -u $auth -s $camera -p \
+			vtb -Q -u $auth -s $camera set-device-config -p \
 			'http-proxy.backup-bb' 'https://s3.us-west-004.backblazeb2.com' >> /dev/null &
-			vtoolbox device.set-device-config -u $auth -s $camera -p \
+			vtb -Q -u $auth -s $camera set-device-config -p \
 			'http-proxy.loggly' 'https://api.control.verkada.com/logs/relay' >> /dev/null &
-			vtoolbox device.set-device-config -u $auth -s $camera -p \
+			vtb -Q -u $auth -s $camera set-device-config -p \
 			'http-proxy.vauth' 'https://api.control.verkada.com/device/auth' >> /dev/null &
-			vtoolbox device.set-device-config -u $auth -s $camera -p \
+			vtb -Q -u $auth -s $camera set-device-config -p \
 			'http-proxy.vcameramgmt' 'https://api.control.verkada.com/manage' >> /dev/null &
-			vtoolbox device.set-device-config -u $auth -s $camera -p \
+			vtb -Q -u $auth -s $camera set-device-config -p \
 			'http-proxy.vflow' 'wss://relay.control.verkada.com/flow/' >> /dev/null &
-			vtoolbox device.set-device-config -u $auth -s $camera -p \
+			vtb -Q -u $auth -s $camera set-device-config -p \
 			'http-proxy.vhistory' 'wss://relay.control.verkada.com/vhistory/camera' >> /dev/null &
-			vtoolbox device.set-device-config -u $auth -s $camera -p \
+			vtb -Q -u $auth -s $camera set-device-config -p \
 			'http-proxy.vosprey' 'https://relay.control.verkada.com/vosprey' >> /dev/null &
-			vtoolbox device.set-device-config -u $auth -s $camera -p \
+			vtb -Q -u $auth -s $camera set-device-config -p \
 			'http-proxy.vprovision' 'https://api.control.verkada.com' >> /dev/null &
-			vtoolbox device.set-device-config -u $auth -s $camera -p \
+			vtb -Q -u $auth -s $camera set-device-config -p \
 			'http-proxy.vproxy' 'https://relay.control.verkada.com' >> /dev/null &
-			vtoolbox device.set-device-config -u $auth -s $camera -p \
+			vtb -Q -u $auth -s $camera set-device-config -p \
 			'http-proxy.vstream' 'wss://relay.control.verkada.com/stream' >> /dev/null &
-			vtoolbox device.set-device-config -u $auth -s $camera -p \
+			vtb -Q -u $auth -s $camera set-device-config -p \
 			'http-proxy.vsubmit' 'https://index.control.verkada.com' >> /dev/null &
-			vtoolbox device.set-device-config -u $auth -s $camera -p \
+			vtb -Q -u $auth -s $camera set-device-config -p \
 			'cvproc-hyperzoom.motion-threshold' '120' >> /dev/null &
-			vtoolbox device.set-device-config -u $auth -s $camera -p \
+			vtb -Q -u $auth -s $camera set-device-config -p \
 			'cvproc-hyperzoom.object-tracking-hz-interval-high-quality' '8000' >> /dev/null &
-			vtoolbox device.set-device-config -u $auth -s $camera -p \
+			vtb -Q -u $auth -s $camera set-device-config -p \
 			'cvproc-hyperzoom.object-tracking-hz-interval-low-quality' '60000' >> /dev/null &
-			vtoolbox device.set-device-config -u $auth -s $camera -p \
+			vtb -Q -u $auth -s $camera set-device-config -p \
 			'cvproc-hyperzoom.object-tracking-max-lost-tracklet-age' '20' >> /dev/null &
-			vtoolbox device.set-device-config -u $auth -s $camera -p \
+			vtb -Q -u $auth -s $camera set-device-config -p \
 			'cvproc-hyperzoom.object-tracking-movement-threshold-low-quality' '0.899' >> /dev/null &
-			vtoolbox device.set-device-config -u $auth -s $camera -p \
+			vtb -Q -u $auth -s $camera set-device-config -p \
 			'cvproc-hyperzoom.person-crop-threshold' '0.83' >> /dev/null &
-			vtoolbox device.set-device-config -u $auth -s $camera -p \
+			vtb -Q -u $auth -s $camera set-device-config -p \
 			'cvproc-hyperzoom.person-intrusion-threshold' '0.5' >> /dev/null &
-			vtoolbox device.set-device-config -u $auth -s $camera -p \
+			vtb -Q -u $auth -s $camera set-device-config -p \
 			'cvproc-hyperzoom.person-send-full-frame-threshold' '0.8' >> /dev/null &
-			vtoolbox device.set-device-config -u $auth -s $camera -p \
+			vtb -Q -u $auth -s $camera set-device-config -p \
 			'cvproc-hyperzoom.vehicle-intrusion-threshold' '0.5' >> /dev/null &
-			vtoolbox device.set-device-config -u $auth -s $camera -p \
+			vtb -Q -u $auth -s $camera set-device-config -p \
 			'cvproc-hyperzoom.vehicle-send-full-frame-threshold' '0.75' >> /dev/null &
-			vtoolbox device.set-device-config -u $auth -s $camera -p \
+			vtb -Q -u $auth -s $camera set-device-config -p \
 			'image-processing.image-night-ae-compensation' '100' >> /dev/null &
-			vtoolbox device.set-device-config -u $auth -s $camera -p \
+			vtb -Q -u $auth -s $camera set-device-config -p \
 			'image-processing.low-lux-mode-off-thresh' '8' >> /dev/null &
-			vtoolbox device.set-device-config -u $auth -s $camera -p \
+			vtb -Q -u $auth -s $camera set-device-config -p \
 			'image-processing.max-shutter-time-hyperzoom-hz' '60' >> /dev/null &
-			vtoolbox device.set-device-config -u $auth -s $camera -p \
+			vtb -Q -u $auth -s $camera set-device-config -p \
 			'image-processing.night-max-shutter-time-hyperzoom-hz' '60' >> /dev/null &
-			vtoolbox device.set-device-config -u $auth -s $camera -p \
+			vtb -Q -u $auth -s $camera set-device-config -p \
 			'motion-search.detection-person-confidence-threshold' '0.68' >> /dev/null &
-			vtoolbox device.set-device-config -u $auth -s $camera -p \
+			vtb -Q -u $auth -s $camera set-device-config -p \
 			'motion-search.detection-vehicle-confidence-threshold' '0.6' >> /dev/null &
-			vtoolbox device.set-device-config -u $auth -s $camera -p \
+			vtb -Q -u $auth -s $camera set-device-config -p \
 			'rtsp.max-viewers' '2' >> /dev/null &
-			vtoolbox device.set-device-config -u $auth -s $camera -p \
+			vtb -Q -u $auth -s $camera set-device-config -p \
 			'release-info.channel' 'customer-stable' >> /dev/null &
-			vtoolbox device.set-device-config -u $auth -s $camera -p \
+			vtb -Q -u $auth -s $camera set-device-config -p \
 			'stats-monitor-config.system-stats-window' '180' >> /dev/null &
-			vtoolbox device.set-device-config -u $auth -s $camera -p \
+			vtb -Q -u $auth -s $camera set-device-config -p \
 			'stream-configs.high.stream-encoding' 'HEVC' >> /dev/null &
-			vtoolbox device.set-device-config -u $auth -s $camera -p \
+			vtb -Q -u $auth -s $camera set-device-config -p \
 			'stream-configs.low.stream-encoding' 'HEVC'  >> /dev/null &
-			vtoolbox device.set-device-config -u $auth -s $camera -p \
+			vtb -Q -u $auth -s $camera set-device-config -p \
 			'storage-manager.cloud-backup-presigned-timeout' '60' >> /dev/null &
-			vtoolbox device.set-device-config -u $auth -s $camera -p \
+			vtb -Q -u $auth -s $camera set-device-config -p \
 			'storage-manager.record-on-motion-expansion' '5' >> /dev/null &
-			vtoolbox device.set-device-config -u $auth -s $camera -p \
+			vtb -Q -u $auth -s $camera set-device-config -p \
 			'storage-manager.thumbnail-repeat-interval' '300' >> /dev/null &
-			vtoolbox device.set-device-config -u $auth -s $camera -p \
+			vtb -Q -u $auth -s $camera set-device-config -p \
 			'stream-configs.vda.motion-notification-divisor' '4' >> /dev/null &
-			vtoolbox device.set-device-config -u $auth -s $camera -p \
+			vtb -Q -u $auth -s $camera set-device-config -p \
 			'vstream.high.enabled' 'false' >> /dev/null &
 			wait
 			echo -e "\nEnd of camera reset for camera $camera."
@@ -293,8 +293,7 @@ nukeOrg () {
 nuke () {
 # Driver function
 	input=""
-
-	working=('Working    |' 'wOrking.   \' 'woRking..  -' 'worKing... |' 'workIng..  /' 'workiNg.   -' 'workingG   |')
+	working=('Working    |' 'wOrking.   \' 'woRking..  -' 'worKing... |' 'workIng..  /' 'workiNg.   -' 'workinG    |')
 
 	if [ -z "$auth" ]; then
 		notSet="Not provided"

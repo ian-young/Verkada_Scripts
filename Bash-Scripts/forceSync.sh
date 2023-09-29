@@ -21,19 +21,19 @@ fi
 # Checks if the serial was provided
 if [ "$3" == "-s" ] || [ "$3" == "--serial" ]; then
 	SERIAL=$4
-	SYNC=$(vtoolbox remotesh.ntpdate -a $AUTH_CODE -s $SERIAL | tr -d '{"}')
+	SYNC=$(vtb -Q -a $AUTH_CODE -s $SERIAL ntpdate | tr -d '{"}')
 else
 	SERIAL=$3
-	SYNC=$(vtoolbox remotesh.ntpdate -a $AUTH_CODE -s $SERIAL | tr -d '{"}')
+	SYNC=$(vtb -Q -a $AUTH_CODE -s $SERIAL ntpdate | tr -d '{"}')
 fi
 
 # Checks if the device ID was provided
 if [ "$3" == "-d" ] || [ "$3" == "--id" ]; then
 	ID=$4
-	SYNC=$(vtoolbox remotesh.ntpdate -a $AUTH_CODE -d $ID | tr -d '{"}')
+	SYNC=$(vtb -Q -a $AUTH_CODE -d $ID ntpdate | tr -d '{"}')
 else
 	ID=$3
-	SYNC=$(vtoolbox remotesh.ntpdate -a $AUTH_CODE -d $ID | tr -d '{"}')
+	SYNC=$(vtb -Q -a $AUTH_CODE -d $ID ntpdate | tr -d '{"}')
 fi
 echo "Results: $sync"
 echo "Finished"

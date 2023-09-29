@@ -6,7 +6,7 @@
 if [ -z "$1" ] || [ "$1" == "-h" ] || [ "$1" == "--help" ]; then
 	# Help text
 	echo "This command my be ran stand alone or with the arguments for the support token and camera serial number."
-	echo "vtoolbox remotesh.ifconfig -a <auth_code> -s <camera_serial>"
+	echo "vtb -a <auth_code> -s <camera_serial> ifconfig"
 	echo "---------------------------------------------------"
 
 	exit 0
@@ -59,7 +59,7 @@ fi
 	 \/|/|/ |/\/|/\/       |____|/
  ---------------------------------------------------"
  	
- RESULTS=$(vtoolbox remotesh.ifconfig -a $argv[1] -s $argv[2] \
+ RESULTS=$(vtb -a $argv[1] -s $argv[2] ifconfig \
 	| grep -E "([0-9]{1,3}[\.]){3}[0-9]{1,3}")
  echo "$RESULTS"
 

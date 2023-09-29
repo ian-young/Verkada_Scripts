@@ -16,7 +16,6 @@ else
 fi
 
 # Get the org ID and print it
-ORG_ID=$(vtoolbox organizations.auth-code-info \
-	--auth-code $AUTH_CODE | grep "organizationId" \
+ORG_ID=$(vtb --auth-code $AUTH_CODE auth-code-info | grep "organizationId" \
 	| head -1 | awk -F ' ' '{print $2}' | tr -d ',"')
 echo "Org ID: $ORG_ID"

@@ -18,22 +18,22 @@ fi
 # Checks if the serial was provided
 if [ "$3" == "-s" ] || [ "$3" == "--serial" ]; then
 	SERIAL=$4
-	ERRMSG=$(vtoolbox remotesh.dmesg -a $AUTH_CODE -s $SERIAL | tr -d '{"}')
+	ERRMSG=$(vtb -Q -a $AUTH_CODE -s $SERIAL dmesg | tr -d '{"}')
 
 else
 	SERIAL=$3
-	ERRMSG=$(vtoolbox remotesh.dmesg -a $AUTH_CODE -s $SERIAL | tr -d '{"}')
+	ERRMSG=$(vtb -Q -a $AUTH_CODE -s $SERIAL dmesg | tr -d '{"}')
 
 fi
 
 # Checks if a device ID was provided
 if [ "$3" == "-d" ] || [ "$3" == "--id" ]; then
 	ID=$4
-	ERRMSG=$(vtoolbox remotesh.dmesg -a $AUTH_CODE -d $ID | tr -d '{"}')
+	ERRMSG=$(vtb -Q -a $AUTH_CODE -d $ID dmesg | tr -d '{"}')
 
 else
 	ID=$3
-	ERRMSG=$(vtoolbox remotesh.dmesg -a $AUTH_CODE -d $ID | tr -d '{"}')
+	ERRMSG=$(vtb -Q -a $AUTH_CODE -d $ID dmesg | tr -d '{"}')
 
 fi
 
