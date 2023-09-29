@@ -16,18 +16,18 @@ fi
 
 if [ "$3" == "-s" ] || [ "$3" == "--serial" ]; then
 	SERIAL=$4
-	NTP_SERVERS=$(vtoolbox remotesh.list-ntp -a $AUTH_CODE -s $SERIAL)
+	NTP_SERVERS=$(vtb -Q -a $AUTH_CODE -s $SERIAL list-ntp)
 else
 	SERIAL=$3
-	NTP_SERVERS=$(vtoolbox remotesh.list-ntp -a $AUTH_CODE -s $SERIAL)
+	NTP_SERVERS=$(vtb -Q -a $AUTH_CODE -s $SERIAL list-ntp)
 fi
 
 if [ "$3" == "-d" ] || [ "$3" == "--id" ]; then
 	SERIAL=$4
-	NTP_SERVERS=$(vtoolbox remotesh.list-ntp -a $AUTH_CODE -d $ID)
+	NTP_SERVERS=$(vtb -Q -a $AUTH_CODE -d $ID list-ntp)
 else
 	SERIAL=$3
-	NTP_SERVERS=$(vtoolbox remotesh.list-ntp -a $AUTH_CODE -d $ID)
+	NTP_SERVERS=$(vtb -Q -a $AUTH_CODE -d $ID list-ntp)
 fi
 
 echo "$NTP_SERVERS"

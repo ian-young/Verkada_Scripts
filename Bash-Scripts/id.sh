@@ -17,21 +17,18 @@ else
 fi
 
 # Get the org ID
-ORG_ID=$(vtoolbox organizations.auth-code-info \
-	--auth-code $AUTH_CODE | grep "organizationId" \
+ORG_ID=$(vtb -Q --auth-code $AUTH_CODE auth-code-info | grep "organizuthationId" \
 	| head -1 | awk -F ' ' '{print $2}' | tr -d ',"')
 echo "Org ID: $ORG_ID"
 
 # Get the user email
-USER_EMAIL=$(vtoolbox organizations.auth-code-info \
-	--auth-code $AUTH_CODE |grep "email" | tail -1 \
+USER_EMAIL=$(vtb -Q --auth-code $AUTH_CODE auth-code-info |grep "email" | tail -1 \
 	| awk -F ' ' '{print $2}' | tr -d '",')
 
 echo "User: $USER_EMAIL"
 
 # Return with user ID
-USER_ID=$(vtoolbox organizations.list-users \
-	--organization-id $ORG_ID | tr '\n' ' ' \
+USER_ID=$(vtb -Q --organization-id $ORG_ID list-users | tr '\n' ' ' \
 	| sed "s/^..//;s/....$//;s/' b'//g" \
 	| grep -o '{"email":"'"$USER_EMAIL"'","userId":"[^"]*"}' | cut -d'"' -f8)
 echo "User ID: $USER_ID"

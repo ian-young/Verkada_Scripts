@@ -40,7 +40,7 @@ case $3 in
 		for URL in "${URLS[@]}"
 			do	
 				echo " "
-				RESULTS=$(vtoolbox remotesh.curl -a $AUTH_CODE -s $SERIAL -u $URL | tr -d '{["]}\n')
+				RESULTS=$(vtb -Q -a $AUTH_CODE -s $SERIAL curl $URL | tr -d '{["]}\n')
 		
 				if [ -z "$RESULTS" ]; then
 					echo "$URL FAILED"
@@ -60,7 +60,7 @@ case $3 in
 		for URL in "${URLS[@]}"
 			do	
 				echo " "
-				RESULTS=$(vtoolbox remotesh.curl -a $AUTH_CODE -d $ID -u $URL | tr -d '{["]}\n')
+				RESULTS=$(vtb -Q -a $AUTH_CODE -d $ID curl $URL | tr -d '{["]}\n')
 		
 			if [ -z "$RESULTS" ]; then
 				echo "$URL FAILED"
@@ -82,7 +82,7 @@ esac
 	for URL in "${URLS[@]}"
 		do	
 			echo " "
-			RESULTS=$(vtoolbox remotesh.curl -a $auth -s $serial -u $URL | tr -d '{["]}\n')
+			RESULTS=$(vtb -Q -a $auth -s $serial curl $URL | tr -d '{["]}\n')
 	
 		if [ -z "$RESULTS" ]; then
 			echo "$URL FAILED"

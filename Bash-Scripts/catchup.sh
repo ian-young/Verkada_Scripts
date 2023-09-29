@@ -41,25 +41,20 @@ EOF
 
 
 function vToolboxSetup () {
-	# Runs the necessary code to install vToolbox for the most part...
-	# Certain aspects of this code cannot be automated due to the private token required for the install.
+	# Runs the necessary code to install vtb for the most part...
+	# Certain aspects of this code cannot be automated due to needing to allow vtb to run in Privacy & Security.
+
+	# Download the vtb file
+	curl -L -o vtb https://vtoolbox.staging.cf.verkada.com/vtoolbox_releases/darwin/vtb
 	
-	# Install Pyenv to manage python versions
-	brew install pyenv
+	mkdir $HOME/.vtb
+	mv vtb $HOME/.vtb/vtb.darwin
+	chmod +x $HOME/.vtb/vtb.darwin
+	sudo ln -s $HOME/.vtb/vtb.darwin /usr/local/bin/vtb
 
-	echo -e "\nSetting up pyenv for zsh\n"
-
-	# add pyenv support to your shell
-	echo 'eval "$(pyenv init --path)"' >> ~/.zshrc
-
-	# refresh your shell config to load pyenv into the currently running terminal
-	source ~/.zshrc
-
-	# install python using pyenv
-	pyenv install 3.10.10
-
-	# set that version of python as your default version
-	pyenv global 3.10.10
+	echo "If the command vtb doesn't run from anywhere in the terminal, run the following command:"
+	echo "sudo ln -s $HOME/.vtb/vtb.darwin /usr/local/bin/vtb"
+	echo "vtb set up has been completed!"
 }
 
 
@@ -89,7 +84,7 @@ echo "-----------------------------------" # Make it clear that the next prompt 
 if [ "$brew" == "y" ]; then
 	until [ "$vToolbox" == "y" ] || [ "$vToolbox" == "n" ]; do
 
-		read -p "Is vToolbox already installed? (y/n) " vToolbox
+		read -p "Is vtb already installed? (y/n) " vToolbox
 
 		vToolbox=$(echo "$vToolbox" | tr '[:upper:]' '[:lower:]')
 
